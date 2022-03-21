@@ -14,7 +14,7 @@ const userSchema =  mongoose.Schema({
   }, //1在职 2离职 3试用期
   "role":{
     type:Number,
-    default1
+    default:1
   }, // 用户角色 0：系统管理员 1普通用户
   "roleList":[],// 系统角色
   "createTime":{
@@ -28,7 +28,7 @@ const userSchema =  mongoose.Schema({
   remark:String // 备注
 })
 
-module.exports = mongoose.model("users",userSchema,"user")
+module.exports = mongoose.model("users",userSchema,"users")
 /**接受三个参数
  * 模型名称
  * 模型

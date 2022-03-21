@@ -13,6 +13,8 @@ const { Logger } = require('log4js')
 // error handler
 onerror(app)
 
+require("./config/db")
+
 // middlewares
 app.use(bodyparser({
   enableTypes:['json', 'form', 'text']

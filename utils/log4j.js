@@ -50,7 +50,7 @@ exports.debug = (content)=>{
 /**
  * 日志输出 level为error
  */
- exports.debug = (content)=>{
+ exports.error = (content)=>{
   let logger = log4js.getLogger('error');
   logger.level = levels.error;
   logger.error(content);
