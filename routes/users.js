@@ -6,7 +6,7 @@ const User = require("../models/userSchema")
 const util = require("../utils/utils")
 const jwt = require("jsonwebtoken")
 router.prefix('/users')
-router.post("/login",async (ctx)=>{
+router.post("/login",async (ctx)=>{ 
   try{
     const {userName,userPwd} = ctx.request.body
     const res = await User.findOne({userName,userPwd})
