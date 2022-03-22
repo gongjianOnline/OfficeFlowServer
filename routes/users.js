@@ -12,7 +12,7 @@ router.post("/login",async (ctx)=>{
     const res = await User.findOne({userName,userPwd})
     const token = jwt.sign({
       data:res._doc,
-    },"imooc",{expiresIn:30})
+    },"imooc",{expiresIn:10})
     if(res){
       let initRes = {
         code:200,
@@ -27,6 +27,20 @@ router.post("/login",async (ctx)=>{
     ctx.body = util.fail("")
   }
   
+})
+
+router.get("/leave/count", async (ctx)=>{
+  jwt.verify(ctx.header.authorization,"imooc",(error,authData)=>{
+    /**
+     * error 报错信息
+     * authData 解析出来的token数据
+     */
+  })
+  ctx.body = {
+    code:200,
+    data:{},
+    msg:"success"
+  }
 })
 
 
