@@ -52,7 +52,7 @@ router.get("/all/list",async (ctx)=>{
   console.log("打印userId",userId)
   if(userId){params.userId = userId}
   if(userName){params.userName = userName}
-  if(state){params.state = state}
+  if(state && state != '0'){params.state = state}
   // 根据条件查询所有用户列表并分页和获取总条数
   try{
     const query = User.find(params,{_id:0,userPwd:0})
@@ -72,4 +72,22 @@ router.get("/all/list",async (ctx)=>{
   }
 })
 
+// 删除用户和批量删除
+router.post("/delete",async (ctx)=>{
+  // 需要删除的用户ID数组
+  const {userIds} = ctx.request.body;
+  const res = await User.updateMany({
+    userId:{$in:userIds},
+  },{ state:2})
+  if(res){
+    ctx.body = util.success({
+      code:200,
+      data:res,
+      msg:`共删除${res.nModified}条`
+    })
+    return 
+  }else{
+    ctx.body = util.fail("删除失败")
+  }
+})
 module.exports = router
