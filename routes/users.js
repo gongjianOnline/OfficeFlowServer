@@ -3,8 +3,10 @@
  */
 const router = require('koa-router')()
 const User = require("../models/userSchema")
+const Counter = require("../models/counterSchema")
 const util = require("../utils/utils")
 const jwt = require("jsonwebtoken")
+const md5 = require("md5")
 router.prefix('/users')
 // 用户登录接口
 router.post("/login", async (ctx) => {
@@ -105,12 +107,37 @@ router.post("/operate", async (ctx) => {
   } = ctx.request.body;
   if (action === "add") {
     if (!userName || !userEmail || !deptId) {
-      ctx.body = util.fail("","参数错误", util.CODE.PARAM_ERROR);
+      ctx.body = util.fail("", "参数错误", util.CODE.PARAM_ERROR);
       return;
+    }
+    // 自增ID
+    const doc = await Counter.findOneAndUpdate({ _id: 'userId' }, { $inc: { sequence_value: 1 } }, { new: true })
+    const res = await User.findOne({$or:[{userName,userEmail}]},"_id userName userEmail")
+    if(res){
+      ctx.body = util.fail("",`${res.userName} - ${res.userEmail}信息重复`,util.CODE.BUSINESS_ERROR)
+    }else{
+      const user = new User({
+        userId:doc.sequence_value,
+        userName,
+        userPwd:md5('admin'),
+        userEmail,
+        role:1,// 默认为普通用户
+        roleList,
+        job,
+        state,
+        deptId,
+        mobile
+      })
+      user.save()
+      ctx.body = util.success({
+        code:200,
+        data:'',
+        msg:"添加成功"
+      })
     }
   } else {
     if (!deptId) {
-      ctx.body = util.fail("","部门不能为空", util.CODE.PARAM_ERROR);
+      ctx.body = util.fail("", "部门不能为空", util.CODE.PARAM_ERROR);
       return;
     }
     // 查找并替换
@@ -122,7 +149,7 @@ router.post("/operate", async (ctx) => {
         msg: "更新成功"
       })
     } else {
-      ctx.body = util.fail("","更新失败",util.CODE.BUSINESS_ERROR)
+      ctx.body = util.fail("", "更新失败", util.CODE.BUSINESS_ERROR)
     }
   }
 })
