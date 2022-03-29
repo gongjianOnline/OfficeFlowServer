@@ -31,7 +31,7 @@ module.exports = {
     log4js.debug(data)
     return {code,data,msg} 
   },
-  fail(data="",msg="",code=CODE.BUSINESS_ERROR){
+  fail(data="",msg="",code=CODE.AUTH_ERROR){
     log4js.debug(msg)
     return {code,data,msg} 
   },
