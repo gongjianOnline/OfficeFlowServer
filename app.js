@@ -6,11 +6,14 @@ const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 // const logger = require('koa-logger')
 const log4js = require("./utils/log4j")
-const index = require('./routes/index')
-const users = require('./routes/users')
 const koajwt = require('koa-jwt')
 const util = require("./utils/utils")
 const { Logger } = require('log4js')
+
+// 路由管理
+const index = require('./routes/index')
+const users = require('./routes/users')
+const menus = require('./routes/menus')
 
 // error handler
 onerror(app)
@@ -49,6 +52,7 @@ app.use(koajwt({secret:'imooc'}).unless({
 // routes
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
+app.use(menus.routes(), menus.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
