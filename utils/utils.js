@@ -15,18 +15,18 @@ module.exports = {
   /**
    * 分页结构封装
    */
-  pager({pageName=1,pageSize=10}){
-    pageName *= 1;
+   pager({ pageNum = 1, pageSize = 10 }) {
+    pageNum *= 1;
     pageSize *= 1;
-    const skipIndex = (pageName-1)*pageSize;
+    const skipIndex = (pageNum - 1) * pageSize;
     return {
-      page:{
-        pageSize,
-        pageName
-      },
-      skipIndex
+        page: {
+            pageNum,
+            pageSize
+        },
+        skipIndex
     }
-  },
+},
   success({data="",msg="",code=CODE.SUCCESS}){
     log4js.debug(data)
     return {code,data,msg} 

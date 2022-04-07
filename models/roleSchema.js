@@ -1,15 +1,19 @@
-const mongoose = require("mongoose")
-const roleSchema = mongoose.Schema({
-  roleName:String,
-  remark:String,
-  PermissionList:{
-    checkedkeys:[],
-    halfCheckedkeys:[]
-  },
-  createTime:{
-    type:Date,
-    default:Date.now()
-  }
+const mongoose = require('mongoose')
+const userSchema = mongoose.Schema({
+    roleName: String,
+    remark: String,
+    permissionList: {
+        checkedKeys: [],
+        halfCheckedKeys: []
+    },
+    updateTime: {
+        type: Date,
+        default: Date.now()
+    },
+    createTime: {
+        type: Date,
+        default: Date.now()
+    }
 })
 
-module.exports = mongoose.model("role",roleSchema,"users")
+module.exports = mongoose.model("roles", userSchema, "roles")
