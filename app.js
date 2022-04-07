@@ -14,6 +14,7 @@ const { Logger } = require('log4js')
 const index = require('./routes/index')
 const users = require('./routes/users')
 const menus = require('./routes/menus')
+const role = require('./routes/role')
 
 // error handler
 onerror(app)
@@ -53,6 +54,7 @@ app.use(koajwt({secret:'imooc'}).unless({
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
 app.use(menus.routes(), menus.allowedMethods())
+app.use(role.routes(), menus.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
