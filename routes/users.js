@@ -46,6 +46,20 @@ router.get("/leave/count", async (ctx) => {
   }
 })
 
+// 获取所有用户列表
+router.get("/all/list",async (ctx)=>{
+  try {
+    const list = await User.find({},"userId userName userEmail")
+    ctx.body = util.success({
+      code:200,
+      data:list,
+      msg:"查询成功"
+    })
+  } catch (error) {
+    ctx.body = util.fail("","查询失败","")
+  }
+})
+
 // 用户列表
 router.get("/all/list", async (ctx) => {
   const { userId, userName, state } = ctx.request.query

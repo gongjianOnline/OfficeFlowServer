@@ -15,6 +15,7 @@ const index = require('./routes/index')
 const users = require('./routes/users')
 const menus = require('./routes/menus')
 const role = require('./routes/role')
+const depts = require("./routes/depts")
 
 // error handler
 onerror(app)
@@ -54,7 +55,8 @@ app.use(koajwt({secret:'imooc'}).unless({
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
 app.use(menus.routes(), menus.allowedMethods())
-app.use(role.routes(), menus.allowedMethods())
+app.use(role.routes(), role.allowedMethods())
+app.use(depts.routes(), depts.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
