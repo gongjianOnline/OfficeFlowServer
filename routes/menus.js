@@ -9,35 +9,14 @@ router.get("/list", async (ctx) => {
   if (menuName) { params.menuName = menuName }
   if (menuState) { params.menuState = menuState }
   let rootList = await Menu.find(params) || []
-  let permissionList = getTreeMenu(rootList, null, [])
+  let permissionList = util.getTreeMenu(rootList, null, [])
   ctx.body = util.success({
     code: 200,
     data: permissionList,
     msg: "查询成功"
   })
 })
-// 递归拼接属性列表
-function getTreeMenu(rootList, id, list) {
-  for (let i = 0; i < rootList.length; i++) {
-    let item = rootList[i]
-    if (String(item.parentId.slice().pop()) == String(id)) {
-      list.push(item._doc)
-    }
-  }
-  list.map(item => {
-    item.children = []
-    getTreeMenu(rootList, item._id, item.children)
-    if (item.children.length == 0) {
-      delete item.children;
-    } else if (item.children.length > 0 && item.children[0].menuType == 2) {
-      // 快速区分按钮和菜单，用于后期做菜单按钮权限控制
-      item.action = item.children;
-    }
-  })
-  console.log(rootList)
-  return list;
 
-}
 
 // 菜单的增删改查
 router.post("/operate", async (ctx) => {
