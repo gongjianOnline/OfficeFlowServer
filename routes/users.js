@@ -175,9 +175,10 @@ router.get("/getPermissionList",async (ctx)=>{
   const authorization = ctx.request.headers.authorization;
   let {data} = util.decoded(authorization)
   let menuList = await getMenuList(data.role,data.roleList)
+  let actionList = getActionList(JSON.parse(JSON.stringify(menuList)))
   ctx.body = util.success({
     code:200,
-    data:menuList,
+    data:{menuList,actionList},
     msg:"解析成功"
   })
 })
@@ -199,5 +200,22 @@ async function getMenuList(userRole,roleKeys){
   }
   return util.getTreeMenu(rootList,null,[])
 }
-
+function getActionList(list){
+  const actionList = [];
+  const deep = (arr)=>{
+    while(arr.length){
+      let item = arr.pop();
+      if(item.action){
+        item.action.map((action)=>{
+          actionList.push(action.menuCode)
+        })
+      }
+      if(item.children && !item.action){
+        deep(item.children)
+      }
+    }
+  }
+  deep(list)
+  return actionList
+}
 module.exports = router
