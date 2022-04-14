@@ -49,18 +49,18 @@ router.get("/leave/count", async (ctx) => {
 })
 
 // 获取所有用户列表
-router.get("/all/list",async (ctx)=>{
-  try {
-    const list = await User.find({},"userId userName userEmail")
-    ctx.body = util.success({
-      code:200,
-      data:list,
-      msg:"查询成功"
-    })
-  } catch (error) {
-    ctx.body = util.fail("","查询失败","")
-  }
-})
+// router.get("/all/list",async (ctx)=>{
+//   try {
+//     const list = await User.find({},"userId userName userEmail")
+//     ctx.body = util.success({
+//       code:200,
+//       data:list,
+//       msg:"查询成功"
+//     })
+//   } catch (error) {
+//     ctx.body = util.fail("","查询失败","")
+//   }
+// })
 
 // 用户列表
 router.get("/all/list", async (ctx) => {
@@ -79,7 +79,7 @@ router.get("/all/list", async (ctx) => {
       code: 200,
       data: {
         list: [...list],
-        page: { total }
+        page: { total:1 }
       },
       msg: "请求成功"
     }
@@ -93,9 +93,7 @@ router.get("/all/list", async (ctx) => {
 router.post("/delete", async (ctx) => {
   // 需要删除的用户ID数组
   const { userIds } = ctx.request.body;
-  const res = await User.updateMany({
-    userId: { $in: userIds },
-  }, { state: 2 })
+  const res = await User.remove({ userId: { $in: userIds } })
   if (res) {
     ctx.body = util.success({
       code: 200,
@@ -182,6 +180,7 @@ router.get("/getPermissionList",async (ctx)=>{
     msg:"解析成功"
   })
 })
+
 async function getMenuList(userRole,roleKeys){
   let rootList = []
   if(userRole == 0){
